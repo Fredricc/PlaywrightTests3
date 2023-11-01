@@ -13,6 +13,8 @@ public class Tests : PageTest
     [Test]
     public async Task HomepageHasPlaywrightInTitleAndGetStartedLinkLinkingtoTheIntroPage()
     {
+        
+
         await Page.GotoAsync("https://playwright.dev");
 
         // Expect a title "to contain" a substring.
@@ -30,7 +32,11 @@ public class Tests : PageTest
         // Expects the URL to contain intro.
         await Expect(Page).ToHaveURLAsync(new Regex(".*intro"));
 
-        await using var browser = await Playwright.Chromium.LaunchAsync();
+        await using var browser = await Playwright.Chromium.LaunchAsync(new() 
+            { 
+                Headless = false,
+                SlowMo = 50,
+            });
 await using var context = await browser.NewContextAsync();
 
 // Start tracing before creating / navigating a page.
@@ -49,5 +55,11 @@ await context.Tracing.StopAsync(new()
 {
     Path = "trace.zip"
 });
+
+await page.ScreenshotAsync(new()
+{
+    Path = "screenshot.png"
+});
+
     }
 }
